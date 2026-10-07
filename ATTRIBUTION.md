@@ -1,6 +1,6 @@
 # Attribution and license status
 
-Original project code by Ved Sarkar. Portfolio documentation and synthetic examples were prepared with AI assistance. Third-party libraries remain subject to their own licenses and notices.
+Original project code by Ved Sarkar. The manual inventory implementation added on 2026-10-07, focused tests, and portfolio documentation were prepared with AI assistance. These additions are new work following the initial source snapshot. Third-party libraries remain subject to their own licenses and notices.
 
 No open-source license is granted for the original project code by this snapshot. No license file was present in the original source reviewed for this project.
 

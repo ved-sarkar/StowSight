@@ -30,3 +30,4 @@ xcuserdata/
 *.sqlite*
 *.db
 *.ipynb
+inventory*.json

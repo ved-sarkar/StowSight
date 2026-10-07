@@ -3,25 +3,11 @@ import PackageDescription
 
 let package = Package(
     name: "StorageTracker",
-    platforms: [
-        .iOS(.v15),
-        .macOS(.v12)
-    ],
-    products: [
-        .executable(
-            name: "StorageTracker",
-            targets: ["StorageTracker"]),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0")
-    ],
+    platforms: [.macOS(.v13)],
+    products: [.executable(name: "StorageTracker", targets: ["StorageTrackerApp"])],
     targets: [
-        .executableTarget(
-            name: "StorageTracker",
-            dependencies: [
-                .product(name: "Logging", package: "swift-log")
-            ],
-            path: "Sources"
-        )
+        .target(name: "InventoryCore"),
+        .executableTarget(name: "StorageTrackerApp", dependencies: ["InventoryCore"]),
+        .executableTarget(name: "InventoryChecks", dependencies: ["InventoryCore"], path: "Tests/InventoryChecks")
     ]
-) 
+)
