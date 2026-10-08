@@ -1,30 +1,27 @@
-# Source map and validation
+# StowSight source map
 
-| Path | Role |
+| File | Responsibility |
 | --- | --- |
-| `Sources/InventoryCore/InventoryStore.swift` | Codable item model, input validation, reload, and atomic save operations |
-| `Sources/StorageTrackerApp/StorageTrackerApp.swift` | Shared application view model and local Application Support file location |
-| `Sources/StorageTrackerApp/ContentView.swift` | Inventory list, item editor, date-reset action, and deletion confirmation |
-| `Tests/InventoryChecks/InventoryChecks.swift` | Focused persistence and failure-path checks using temporary fictional data |
-| `Package.swift` | One macOS SwiftUI executable, one Foundation core target, and a dependency-free check runner |
+| `Sources/InventoryCore/InventoryStore.swift` | Codable inventory, validation, atomic JSON persistence; optional last-seen and last-used dates |
+| `Sources/InventoryCore/ScanWorkflow.swift` | Explicit mock adapter, synthetic fixtures, review state machine, duplicate/match safeguards and batch commit |
+| `Sources/StorageTrackerApp/StorageTrackerApp.swift` | App entry, local store path, observable model, asynchronous cancellation and session identity checks |
+| `Sources/StorageTrackerApp/ContentView.swift` | Indigo/lilac StowSight UI: intake, proposal correction/approval, inventory, rescan, errors and manual editor |
+| `Sources/StorageTrackerApp/ScreenshotRenderer.swift` | Native offscreen UI rendering with isolated synthetic data |
+| `Sources/StorageTrackerApp/ApplicationChecks.swift` | Integration checks of the observable model and asynchronous recognition |
+| `Tests/InventoryChecks/` | Executable checks for CRUD, review states, duplicates, cancellation, rescan and persistence |
+| `Scripts/` | Local demo, validation and screenshot launchers; no installation or download steps |
+| `Package.swift` | StowSight product, legacy StorageTracker launch alias, Foundation core and dependency-free check runner |
 
-## Persistence behavior
+## Persistence and review boundaries
 
-An item has a stable UUID, name, description, location, estimated value, and last-used date. Empty names, negative/non-finite values, and duplicate stored identifiers are rejected. A failed save leaves the previous in-memory list intact. A malformed inventory file is not replaced with an empty inventory; the UI disables editing until the file is repaired or restored and the app reopened.
+Recognition returns observations, never inventory writes. `ScanSession` holds review decisions against a baseline inventory. Approval requires a decision on every proposal and validates the entire batch. Only an explicit user-selected match updates an existing identity; unmatched objects stay saved. Two observations cannot target the same existing identity in one review.
 
-The JSON file is a normal local file, not encrypted storage or a database with multi-process transactions. No contents are sent over the network. Keep personal inventories out of the repository; `inventory*.json` is ignored as an additional precaution.
+A failed write leaves both stored inventory and displayed inventory unchanged and retains the review for retry. Malformed JSON disables editing instead of replacing the file. JSON is a normal local file, not encrypted storage or a database with multi-process transactions. Keep personal inventories out of the repository; `.demo-data/` and `inventory*.json` are ignored.
+
+The data schema remains compatible with the previous manual inventory. Existing last-used dates load unchanged; newly observed items have no invented last-used date. The default offline data location remains `StorageTrackerDemo/inventory.json` in Application Support. The launcher explicitly selects a checkout-local `.demo-data/inventory.json`, separate from the old manual app’s store.
 
 ## History and scope
 
-The initial source snapshot (`039fcb3`) captured the original inventory view, two conflicting app entry points, and a Core Data container with no model. The new 2026-10-07 implementation resolves that structure into a manual macOS inventory app. It preserves the intended item fields and last-used action, adds add/edit/delete persistence, and does not add camera or model-provider integrations. The unused SwiftLog dependency was removed.
+StowSight extends the manual Storage Tracker prototype with synthetic clip intake and a working review/rescan flow. The repository name and internal target directory retain Storage Tracker identifiers for continuity. There is no live media parser, Gemini client, camera implementation or iOS target.
 
-The original local working folder was not modified. The initial repository commit retains the prior scaffolds. Its tutorial notebook, generated Xcode shell/tests, user/signing settings, and private notes were never included.
-
-## Validation
-
-Checked on 2026-10-07 with Apple Swift 6.3.2 on Apple Silicon:
-
-- `swift run InventoryChecks`: all four persistence checks passed (CRUD round trip, invalid changes, malformed/duplicate records, and failed writes).
-- `swift build --product StorageTracker`: SwiftUI application compiled and linked successfully.
-
-The runner uses Foundation and temporary fictional data, so XCTest or third-party test libraries are not required. No camera, network provider, personal inventory, or hardware was used. The app was compiled but not launched; UI interaction has not been verified in this environment.
+The original author and licensing notices are retained in [ATTRIBUTION.md](../ATTRIBUTION.md). Earlier implementation details and validation are preserved in [HISTORY.md](HISTORY.md), and prior source snapshots remain in Git history.

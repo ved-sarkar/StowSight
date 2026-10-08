@@ -2,9 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "StorageTracker",
+    name: "StowSight",
     platforms: [.macOS(.v13)],
-    products: [.executable(name: "StorageTracker", targets: ["StorageTrackerApp"])],
+    products: [
+        .executable(name: "StowSight", targets: ["StorageTrackerApp"]),
+        .executable(name: "StorageTracker", targets: ["StorageTrackerApp"]) // Legacy launch compatibility.
+    ],
     targets: [
         .target(name: "InventoryCore"),
         .executableTarget(name: "StorageTrackerApp", dependencies: ["InventoryCore"]),

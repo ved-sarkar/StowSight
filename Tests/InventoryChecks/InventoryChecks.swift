@@ -72,20 +72,20 @@ final class InventoryChecks {
 }
 
 
-private struct CheckFailure: Error, CustomStringConvertible {
+struct CheckFailure: Error, CustomStringConvertible {
     let description: String
 }
 
-private func expectTrue(_ condition: Bool, file: StaticString = #fileID, line: UInt = #line) throws {
+func expectTrue(_ condition: Bool, file: StaticString = #fileID, line: UInt = #line) throws {
     guard condition else { throw CheckFailure(description: "Assertion failed at \(file):\(line)") }
 }
 
-private func expectEqual<T: Equatable>(_ actual: T, _ expected: T,
+func expectEqual<T: Equatable>(_ actual: T, _ expected: T,
                                         file: StaticString = #fileID, line: UInt = #line) throws {
     guard actual == expected else { throw CheckFailure(description: "Values differ at \(file):\(line)") }
 }
 
-private func expectThrows<T>(_ action: @autoclosure () throws -> T,
+func expectThrows<T>(_ action: @autoclosure () throws -> T,
                              file: StaticString = #fileID, line: UInt = #line) throws {
     do { _ = try action() }
     catch { return }
@@ -94,7 +94,7 @@ private func expectThrows<T>(_ action: @autoclosure () throws -> T,
 
 @main
 struct RunChecks {
-    static func main() throws {
+    static func main() async throws {
         let checks = InventoryChecks()
         let cases: [(String, () throws -> Void)] = [
             ("CRUD round trip", checks.testCreateEditMarkUsedAndDeleteSurviveReload),
@@ -114,5 +114,6 @@ struct RunChecks {
             }
         }
         print("All \(cases.count) inventory checks passed.")
+        try await ScanChecks(directory: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)).run()
     }
 }

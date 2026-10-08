@@ -1,22 +1,24 @@
 import Foundation
 
-public struct InventoryItem: Codable, Equatable, Identifiable {
+public struct InventoryItem: Codable, Equatable, Identifiable, Sendable {
     public let id: UUID
     public var name: String
     public var itemDescription: String
     public var location: String
     public var estimatedValue: Double
-    public var lastUsedDate: Date
+    public var lastUsedDate: Date?
+    public var lastSeenDate: Date?
 
     public init(id: UUID = UUID(), name: String, itemDescription: String = "",
                 location: String = "", estimatedValue: Double = 0,
-                lastUsedDate: Date = Date()) {
+                lastUsedDate: Date? = nil, lastSeenDate: Date? = nil) {
         self.id = id
         self.name = name
         self.itemDescription = itemDescription
         self.location = location
         self.estimatedValue = estimatedValue
         self.lastUsedDate = lastUsedDate
+        self.lastSeenDate = lastSeenDate
     }
 }
 
@@ -69,7 +71,9 @@ public struct InventoryStore {
         try upsert(item)
     }
 
-    private static func validated(_ items: [InventoryItem]) throws -> [InventoryItem] {
+    public mutating func replaceAll(_ next: [InventoryItem]) throws { try persist(next) }
+
+    public static func validated(_ items: [InventoryItem]) throws -> [InventoryItem] {
         guard Set(items.map(\.id)).count == items.count else { throw InventoryError.duplicateID }
         return try items.map { item in
             var clean = item

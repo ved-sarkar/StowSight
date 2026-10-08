@@ -31,3 +31,6 @@ xcuserdata/
 *.db
 *.ipynb
 inventory*.json
+
+# Isolated demo inventory
+.demo-data/
