@@ -6,7 +6,7 @@ Storage rooms, moving boxes, garages, and the things you haven’t organized yet
 
 ## Why I built this
 
-My sister had a storage unit below her studio apartment, and things stored there were easy to forget or lose track of. That got me thinking about StowSight: taking a quick video to create an inventory you could edit, with enough visual context to find the right box or drawer. The idea later expanded to moving, with inventories you could compare before and after.
+My sister in December 2023, when video capable llms like gemini came out, had a storage unit below her studio apartment, and things stored there were easy to forget or lose track of. That got me thinking about StowSight: taking a quick video to create an inventory you could edit, with enough visual context to find the right box or drawer. The idea later expanded to moving, with inventories you could compare before and after.
 
 > **Offline demo:** the macOS app uses a mock recognizer and synthetic observations. Review, local saving and rescans work today; phone video intake, visual item context and live Gemini recognition are planned.
 
