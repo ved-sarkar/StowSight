@@ -16,6 +16,15 @@ My sister in December 2023, when video capable llms like gemini came out, had a 
 
 ## From a quick look to a useful catalogue
 
+```mermaid
+flowchart TD
+    Clip["Choose a demo clip"] --> Proposals["Proposed belongings"]
+    Proposals --> Review["Edit, match or exclude"]
+    Review --> Inventory["Approve and save inventory"]
+    Inventory --> Rescan["Revisit the space"]
+    Rescan --> Review
+```
+
 1. **Choose a clip.** In this demo, select a built-in synthetic storage-room scenario.
 2. **Review what was found.** Edit names, descriptions and locations. Exclude a false positive or a repeated observation.
 3. **Approve your inventory.** Save the reviewed batch locally, then find and edit your belongings later.
@@ -34,6 +43,26 @@ Every rescan gives you a chance to review what changed. Confirm a match to updat
 *The sewing kit is outside this scan. It remains in the inventory. The drill moves only after its match and corrected location are approved.*
 
 [See the saved rescan](docs/screenshots/06-rescan-saved.png) · [Browse all six demo screens](docs/DEMO.md)
+
+## Technical architecture
+
+The SwiftUI interface hands recognition and review state to `InventoryViewModel`. Proposals remain separate from saved inventory until the reviewed batch is approved.
+
+```mermaid
+flowchart TD
+    UI["SwiftUI ContentView"] --> State["InventoryViewModel"]
+    State --> Mock["MockRecognitionAdapter"]
+    Mock --> Review["ScanSession: proposals + review"]
+    State --> Review
+    Review --> Store["InventoryStore"]
+    Store --> JSON["Atomic local JSON"]
+    Video["Planned phone video intake"] -.-> Gemini["Planned backend + Gemini"]
+    Gemini -.-> Review
+```
+
+`ScanSession` checks review decisions, duplicate matches and changes to the starting inventory before committing through `InventoryStore`. The store writes atomically to local JSON; review drafts stay in memory, and unseen items are retained on a rescan.
+
+Solid arrows show the offline prototype. Dotted arrows show the planned phone-video and backend/Gemini path, which will feed the same review step. [Live-integration plan](docs/LIVE_INTEGRATION.md)
 
 ## Try it on your Mac
 
