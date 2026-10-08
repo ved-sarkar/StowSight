@@ -22,6 +22,6 @@ The data schema remains compatible with the previous manual inventory. Existing 
 
 ## History and scope
 
-StowSight extends the manual Storage Tracker prototype with synthetic clip intake and a working review/rescan flow. The repository name and internal target directory retain Storage Tracker identifiers for continuity. There is no live media parser, Gemini client, camera implementation or iOS target.
+StowSight extends the manual Storage Tracker prototype with synthetic clip intake and a working review/rescan flow. The repository is named StowSight; internal target directories retain legacy Storage Tracker identifiers for continuity. There is no live media parser, Gemini client, camera implementation or iOS target.
 
 The original author and licensing notices are retained in [ATTRIBUTION.md](../ATTRIBUTION.md). Earlier implementation details and validation are preserved in [HISTORY.md](HISTORY.md), and prior source snapshots remain in Git history.

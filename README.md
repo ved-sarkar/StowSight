@@ -74,7 +74,7 @@ From this source folder or the extracted demo package:
 ./Scripts/demo.sh
 ```
 
-The repository URL remains `Storage-Tracker`; the product is **StowSight**. The launcher stores approved items in `.demo-data/inventory.json` inside your checkout. It leaves the earlier manual app’s inventory untouched.
+The project is hosted at [ved-sarkar/StowSight](https://github.com/ved-sarkar/StowSight). The launcher stores approved items in `.demo-data/inventory.json` inside your checkout. It leaves the earlier manual app’s inventory untouched.
 
 For a direct launch, use `swift run StowSight`. The legacy `swift run StorageTracker` command still works. Direct launches retain the offline prototype’s `~/Library/Application Support/StorageTrackerDemo/inventory.json` location; `--data /absolute/path/inventory.json` selects another store. Avoid running two copies against the same file.
 
